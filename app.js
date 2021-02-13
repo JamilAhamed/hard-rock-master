@@ -5,9 +5,19 @@
 //      const data = await res.json();
 //      displaySongs(data.data);
 // }
+
+document.getElementById("search-field")
+   .addEventListener("keypress", function (event){
+       if (event.key === 'Enter'){
+           document.getElementById("search-button").click();
+       }
+   });
+
+
 const searchSong = () => {
     const searchText = document.getElementById('search-field').value;
     const url =`https://api.lyrics.ovh/suggest/${searchText}`
+    toggleSpinner();
     fetch(url)
     .then(res => res.json())
     .then(data => displaySongs(data.data))
@@ -32,6 +42,7 @@ const displaySongs = songs => {
         <button onclick="getLyric('${song.artist.name}','${song.title}')" class="btn btn-success">Get Lyrics</button>
     </div>`
         songContainer.appendChild(songDiv);
+        toggleSpinner ();
     })
 }
 
@@ -43,7 +54,7 @@ const getLyric = async (artist, title) =>{
     displayLyrics(data.lyrics);
   }
   catch (error){
-     displayError('Sorry! I failed to error, Please try again later');
+     displayError('Sorry! I failed to load, Please try again later');
   }
 
 }
@@ -52,6 +63,15 @@ const getLyric = async (artist, title) =>{
      lyricsDiv.innerText = lyrics;
  }
  const displayError = error =>{
-     const errorTag = document.getElementById('error-messege')
+     const errorTag = document.getElementById('error-message')
      errorTag.innerText = error;
+ }
+
+ const toggleSpinner = () => {
+     const spinner = document.getElementById('loading-spinner');
+     const songs = document.getElementById('song-container');
+     spinner.classList.toggle('d-flex')
+        spinner.classList.toggle('d-none');
+        songs.classList.toggle('d-none');
+     
  }
